@@ -1,7 +1,9 @@
 // AccessibilityValidator.ts — Reusable accessibility validation module for any widgets
-// Load axe-core separately in design mode.
+// Bundles axe-core directly - no manual script loading required.
 // Scans configurable widget selectors with automatic revalidation on content changes.
 // Features: MutationObserver, CMS event handling, debounced rechecks.
+
+import axe from 'axe-core';
 
 // Type definitions for axe-core
 interface AxeResults {
@@ -86,11 +88,19 @@ interface AxeRunOptions {
     iframes?: boolean;
 }
 
-// Axe global interface
+// Axe global interface (type for imported axe-core)
 interface AxeCore {
     run(context?: Element | Document | string, options?: AxeRunOptions): Promise<AxeResults>;
     configure(config: any): void;
     getRules(): any[];
+}
+
+// Make axe available globally for backward compatibility
+declare global {
+    interface Window {
+        axe?: AxeCore;
+        AccessibilityValidator?: typeof AccessibilityValidator;
+    }
 }
 
 // Configuration interface for the accessibility validator
@@ -173,15 +183,8 @@ interface WidgetStateInfo {
     state: WidgetState;
 }
 
-// Enhanced popup element interface
 interface PopupElement extends HTMLDivElement {
     _outsideClickHandler?: (e: Event) => void;
-}
-
-// Global window extensions
-interface WindowWithAxe extends Window {
-    axe?: AxeCore;
-    AccessibilityValidator?: typeof AccessibilityValidator;
 }
 
 /**
@@ -192,7 +195,6 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
     private widgetCache = new WeakMap<Element, WidgetState>();
     private recheckTimeout: number | undefined;
     private mutationObserver: MutationObserver | null = null;
-    private windowWithAxe: WindowWithAxe;
     private isInitialized = false;
     private uiClasses: UIClasses;
 
@@ -225,9 +227,12 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
     ] as const;
 
     constructor(config: AccessibilityValidatorConfig) {
-        this.windowWithAxe = window as WindowWithAxe;
         this.config = this.mergeConfig(config);
         this.uiClasses = this.createUIClasses();
+        // Make axe available globally for backward compatibility
+        if (typeof window !== 'undefined') {
+            window.axe = axe;
+        }
         this.initialize();
     }
 
@@ -244,8 +249,8 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
 
         // Auto-detect debug logging if not specified
         if (merged.enableDebugLogging === undefined) {
-            merged.enableDebugLogging = this.windowWithAxe.location.hostname === 'localhost' || 
-                                      this.windowWithAxe.location.hostname.includes('dev');
+            merged.enableDebugLogging = window.location.hostname === 'localhost' || 
+                                      window.location.hostname.includes('dev');
         }
 
         return merged;
@@ -536,7 +541,7 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
      */
     private setupEventListeners(): void {
         // Listen for custom recheck events
-        this.windowWithAxe.addEventListener('wa11y:recheck', () => this.recheckAll());
+        window.addEventListener('wa11y:recheck', () => this.recheckAll());
         
         // Listen for CMS events
         if (this.config.cmsEvents) {
@@ -546,7 +551,7 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
         }
 
         // Cleanup on page unload
-        this.windowWithAxe.addEventListener('beforeunload', () => this.destroy());
+        window.addEventListener('beforeunload', () => this.destroy());
     }
 
     /**
@@ -568,7 +573,10 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
                 }
                 
                 if (mutation.type === 'childList') {
-                    const allNodes: Node[] = [...mutation.addedNodes, ...mutation.removedNodes];
+                    const allNodes: Node[] = [
+                        ...Array.from(mutation.addedNodes), 
+                        ...Array.from(mutation.removedNodes)
+                    ];
                     const isOurUI: boolean = allNodes.some(node => 
                         node.nodeType === Node.ELEMENT_NODE && this.isOurUIElement(node as Element)
                     );
@@ -604,13 +612,6 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
      * Main audit function
      */
     async recheckAll(): Promise<void> {
-        if (!this.windowWithAxe.axe) {
-            if (this.config.enableDebugLogging) {
-                console.warn('[AccessibilityValidator] axe-core not available');
-            }
-            return;
-        }
-
         this.injectCSS();
 
         const widgets: NodeListOf<Element> = this.getAllWidgets();
@@ -636,7 +637,7 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
                 }
                 // If neither axeRules nor axeTags are specified, run ALL rules (no runOnly restriction)
                 
-                const { violations }: AxeResults = await this.windowWithAxe.axe!.run(document, axeOptions);
+                const { violations }: AxeResults = await axe.run(document, axeOptions);
                 
                 if (this.config.enableDebugLogging) {
                     const summary: ViolationSummary[] = violations.map(v => ({ 
@@ -760,7 +761,9 @@ function createAccessibilityValidator(config: AccessibilityValidatorConfig): Acc
 }
 
 // Expose on window for global access
-(window as WindowWithAxe).AccessibilityValidator = AccessibilityValidator;
+if (typeof window !== 'undefined') {
+    window.AccessibilityValidator = AccessibilityValidator;
+}
 
 // Legacy compatibility - create default instance for card-video
 const cardVideoValidator = createAccessibilityValidator({
@@ -777,4 +780,14 @@ const cardVideoValidator = createAccessibilityValidator({
     addSelectors: (selectors: string[]) => cardVideoValidator.addSelectors(selectors),
     getWidgetStates: () => cardVideoValidator.getWidgetStates(),
     config: cardVideoValidator.getConfig()
+};
+
+// ES Module export for modern usage
+export default AccessibilityValidator;
+export { createAccessibilityValidator };
+export type { 
+    AccessibilityValidatorConfig, 
+    AccessibilityValidatorAPI,
+    AxeResults,
+    AxeViolation 
 };

@@ -1,5 +1,86 @@
 # Digiteam Sitefinity Validator
 
+## Installation & Build
+
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Setup
+```bash
+# Install dependencies
+npm install
+
+# Build the library
+npm run build
+
+# Watch mode for development
+npm run watch
+```
+
+### Output
+The build process creates three module formats in the `dist/` folder:
+- `accessibility-validator.cjs.js` - CommonJS (Node.js)
+- `accessibility-validator.esm.js` - ES Module (modern bundlers)
+- `accessibility-validator.umd.js` - UMD (browser global)
+
+## Usage
+
+### Option 1: As ES Module (Modern)
+```typescript
+import AccessibilityValidator from './dist/accessibility-validator.esm.js';
+
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video', '.widget']
+});
+```
+
+### Option 2: As UMD in Browser
+```html
+<script src="dist/accessibility-validator.umd.js"></script>
+<script>
+  const validator = new AccessibilityValidator({
+      widgetSelectors: ['.card-video']
+  });
+</script>
+```
+
+### Option 3: CommonJS (Node.js)
+```javascript
+const AccessibilityValidator = require('./dist/accessibility-validator.cjs.js');
+```
+
+## Features
+✅ **No manual script loading** - axe-core is bundled automatically  
+✅ **TypeScript support** - Full type definitions included  
+✅ **Multiple module formats** - Works with any build system  
+✅ **Zero external dependencies** - Everything bundled in ~1.3MB
+
+## Quick Start
+
+### Try the Demo
+Open `demo.html` in your browser to see it in action. No build step needed for the demo!
+
+### In Your Project
+
+**Before (Old Way):**
+```html
+<!-- Had to manually include axe-core -->
+<script src="https://unpkg.com/axe-core/axe.min.js"></script>
+<script src="your-validator.js"></script>
+```
+
+**After (New Way):**
+```html
+<!-- Everything bundled together! -->
+<script src="dist/accessibility-validator.umd.js"></script>
+<script>
+  new AccessibilityValidator({
+    widgetSelectors: ['.card-video']
+  });
+</script>
+```  
+
 ## Overview
 The AccessibilityValidator module now supports three modes for rule checking:
 

@@ -1,0 +1,37 @@
+{
+  "name": "digiteam-sitefinity-validator",
+  "version": "1.0.0",
+  "description": "Accessibility validation module for Sitefinity widgets using axe-core",
+  "main": "dist/accessibility-validator.cjs.js",
+  "module": "dist/accessibility-validator.esm.js",
+  "types": "dist/accessibility-validator.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "axe-core",
+    "sitefinity",
+    "validator",
+    "wcag"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axe-core": "^4.10.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "rollup": "^4.24.4",
+    "tslib": "^2.8.1",
+    "typescript": "^5.6.3"
+  }
+}

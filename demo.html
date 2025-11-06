@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Validator Demo</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card-video {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        h1 {
+            color: #333;
+        }
+        .demo-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-info">
+        <h1>Accessibility Validator Demo</h1>
+        <p><strong>✅ No manual script loading required!</strong></p>
+        <p>axe-core is bundled automatically. Just include the UMD build.</p>
+    </div>
+
+    <!-- Example widgets with accessibility issues -->
+    <div class="card-video">
+        <h2>Widget 1 - Missing Alt Text</h2>
+        <img src="https://via.placeholder.com/300x200" />
+        <a href="#">Click here</a>
+    </div>
+
+    <div class="card-video">
+        <h2>Widget 2 - Good Accessibility</h2>
+        <img src="https://via.placeholder.com/300x200" alt="Example placeholder image" />
+        <a href="#" aria-label="Learn more about our services">Learn more</a>
+    </div>
+
+    <div class="card-video">
+        <h2>Widget 3 - Multiple Issues</h2>
+        <img src="https://via.placeholder.com/300x200" />
+        <img src="https://via.placeholder.com/150x100" />
+        <a href="#">Link</a>
+        <button>Submit</button>
+    </div>
+
+    <!-- Load the bundled library (includes axe-core) -->
+    <script src="dist/accessibility-validator.umd.js"></script>
+    
+    <script>
+        // Initialize the validator - that's it!
+        const validator = new AccessibilityValidator({
+            widgetSelectors: ['.card-video'],
+            enableDebugLogging: true
+        });
+
+        console.log('✅ Validator initialized with bundled axe-core!');
+        console.log('Config:', validator.getConfig());
+    </script>
+</body>
+</html>
