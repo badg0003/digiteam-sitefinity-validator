@@ -54,7 +54,7 @@ const AccessibilityValidator = require('./dist/accessibility-validator.cjs.js');
 ✅ **No manual script loading** - axe-core is bundled automatically  
 ✅ **TypeScript support** - Full type definitions included  
 ✅ **Multiple module formats** - Works with any build system  
-✅ **Zero external dependencies** - Everything bundled in ~1.3MB
+✅ **Minified & optimized** - Only ~568KB per bundle (includes axe-core)
 
 ## Quick Start
 

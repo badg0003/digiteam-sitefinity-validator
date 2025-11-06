@@ -37,10 +37,10 @@
 
 ## Build Output
 
-Three module formats generated in `dist/`:
-- **accessibility-validator.cjs.js** (1.3MB) - CommonJS for Node.js
-- **accessibility-validator.esm.js** (1.3MB) - ES Module for modern bundlers
-- **accessibility-validator.umd.js** (1.4MB) - UMD for browser globals
+Three minified module formats generated in `dist/`:
+- **accessibility-validator.cjs.js** (568KB) - CommonJS for Node.js
+- **accessibility-validator.esm.js** (568KB) - ES Module for modern bundlers
+- **accessibility-validator.umd.js** (569KB) - UMD for browser globals
 - TypeScript definitions (*.d.ts)
 - Source maps for debugging
 

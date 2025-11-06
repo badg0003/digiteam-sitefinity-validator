@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import terser from '@rollup/plugin-terser';
 
 export default {
   input: 'AccessibilityValidator.ts',
@@ -9,11 +10,13 @@ export default {
       file: 'dist/accessibility-validator.cjs.js',
       format: 'cjs',
       sourcemap: true,
+      plugins: [terser()],
     },
     {
       file: 'dist/accessibility-validator.esm.js',
       format: 'es',
       sourcemap: true,
+      plugins: [terser()],
     },
     {
       file: 'dist/accessibility-validator.umd.js',
@@ -22,7 +25,8 @@ export default {
       sourcemap: true,
       globals: {
         'axe-core': 'axe'
-      }
+      },
+      plugins: [terser()],
     }
   ],
   external: [], // Bundle axe-core with the library
