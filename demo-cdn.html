@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Validator - CDN Demo</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card-video {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        h1 {
+            color: #333;
+        }
+        .demo-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .cdn-note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="cdn-note">
+        <h2>🚀 Using CDN</h2>
+        <p><strong>No npm install required!</strong> Just include the script from CDN.</p>
+        <p>Current source: <code id="cdn-source">Loading...</code></p>
+    </div>
+
+    <div class="demo-info">
+        <h1>Accessibility Validator Demo</h1>
+        <p><strong>✅ Loaded directly from CDN</strong></p>
+        <p>axe-core is bundled automatically. No manual script loading needed!</p>
+    </div>
+
+    <!-- Example widgets with accessibility issues -->
+    <div class="card-video">
+        <h2>Widget 1 - Missing Alt Text</h2>
+        <img src="https://via.placeholder.com/300x200" />
+        <a href="#">Click here</a>
+    </div>
+
+    <div class="card-video">
+        <h2>Widget 2 - Good Accessibility</h2>
+        <img src="https://via.placeholder.com/300x200" alt="Example placeholder image" />
+        <a href="#" aria-label="Learn more about our services">Learn more</a>
+    </div>
+
+    <div class="card-video">
+        <h2>Widget 3 - Multiple Issues</h2>
+        <img src="https://via.placeholder.com/300x200" />
+        <img src="https://via.placeholder.com/150x100" />
+        <a href="#">Link</a>
+        <button>Submit</button>
+    </div>
+
+    <!-- 
+    ============================================
+    OPTION 1: unpkg (Choose one of these options)
+    ============================================
+    -->
+    <script src="https://unpkg.com/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js"></script>
+    
+    <!-- 
+    ============================================
+    OPTION 2: jsDelivr (Recommended for production)
+    ============================================
+    <script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js"></script>
+    -->
+
+    <!-- 
+    ============================================
+    OPTION 3: GitHub CDN (if not published to npm)
+    ============================================
+    <script src="https://cdn.jsdelivr.net/gh/badg0003/digiteam-sitefinity-validator@v1.0.0/dist/accessibility-validator.umd.js"></script>
+    -->
+
+    <!-- 
+    ============================================
+    OPTION 4: ES Module from CDN
+    ============================================
+    <script type="module">
+      import AccessibilityValidator from 'https://esm.sh/digiteam-sitefinity-validator@1.0.0';
+      
+      const validator = new AccessibilityValidator({
+        widgetSelectors: ['.card-video'],
+        enableDebugLogging: true
+      });
+      
+      console.log('✅ Validator initialized from ES Module CDN!');
+    </script>
+    -->
+    
+    <script>
+        // Show which CDN we're using
+        document.getElementById('cdn-source').textContent = 
+            document.currentScript.previousElementSibling.src || 'Local file';
+
+        // Initialize the validator
+        const validator = new AccessibilityValidator({
+            widgetSelectors: ['.card-video'],
+            enableDebugLogging: true
+        });
+
+        console.log('✅ Validator initialized from CDN!');
+        console.log('CDN Source:', document.scripts[document.scripts.length - 2].src);
+        console.log('Config:', validator.getConfig());
+    </script>
+</body>
+</html>

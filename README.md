@@ -1,12 +1,16 @@
 # Digiteam Sitefinity Validator
 
+A comprehensive accessibility validation module for Sitefinity widgets powered by axe-core.
+
 ## Installation & Build
 
-### Prerequisites
+### For Development
+
+#### Prerequisites
 - Node.js (v14 or higher)
 - npm or yarn
 
-### Setup
+#### Setup
 ```bash
 # Install dependencies
 npm install
@@ -17,6 +21,35 @@ npm run build
 # Watch mode for development
 npm run watch
 ```
+
+### For Production Use
+
+#### Option 1: Via CDN (Easiest)
+
+**unpkg:**
+```html
+<script src="https://unpkg.com/digiteam-sitefinity-validator/dist/accessibility-validator.umd.js"></script>
+```
+
+**jsDelivr:**
+```html
+<script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator/dist/accessibility-validator.umd.js"></script>
+```
+
+**ES Module:**
+```html
+<script type="module">
+  import AccessibilityValidator from 'https://esm.sh/digiteam-sitefinity-validator';
+</script>
+```
+
+#### Option 2: Via npm
+```bash
+npm install digiteam-sitefinity-validator
+```
+
+#### Option 3: Download from GitHub Releases
+Download the latest release from the [releases page](https://github.com/badg0003/digiteam-sitefinity-validator/releases).
 
 ### Output
 The build process creates three module formats in the `dist/` folder:
