@@ -1,6 +1,6 @@
 {
   "name": "digiteam-sitefinity-validator",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Accessibility validation module for Sitefinity widgets using axe-core",
   "main": "dist/accessibility-validator.cjs.js",
   "module": "dist/accessibility-validator.esm.js",
