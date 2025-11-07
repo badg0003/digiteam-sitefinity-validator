@@ -88,7 +88,21 @@ const AccessibilityValidator = require('./dist/accessibility-validator.cjs.js');
 
 ## Backward Compatibility
 
-The library still exposes `window.AccessibilityValidator` and `window.axe` for backward compatibility with existing code. Legacy `CardA11y` global API is maintained.
+~~The library still exposes `window.AccessibilityValidator` and `window.axe` for backward compatibility with existing code. Legacy `CardA11y` global API is maintained.~~
+
+**Note:** Legacy backward compatibility features have been removed. Users must now explicitly instantiate the validator:
+
+```javascript
+// Modern usage (ES Module)
+import AccessibilityValidator from './dist/accessibility-validator.esm.js';
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video']
+});
+
+// Or UMD in browser
+// <script src="dist/accessibility-validator.umd.js"></script>
+// const validator = new AccessibilityValidator({ widgetSelectors: ['.card-video'] });
+```
 
 ## Next Steps
 
