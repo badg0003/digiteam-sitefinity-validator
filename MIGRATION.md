@@ -88,9 +88,16 @@ const AccessibilityValidator = require('./dist/accessibility-validator.cjs.js');
 
 ## Backward Compatibility
 
-~~The library still exposes `window.AccessibilityValidator` and `window.axe` for backward compatibility with existing code. Legacy `CardA11y` global API is maintained.~~
+**Breaking Change:** Legacy backward compatibility features have been removed as of this version.
 
-**Note:** Legacy backward compatibility features have been removed. Users must now explicitly instantiate the validator:
+The following are **no longer available**:
+- `window.AccessibilityValidator` - global constructor
+- `window.axe` - global axe-core instance  
+- `window.CardA11y` - legacy global API
+
+**Migration Required:**
+
+Users must now explicitly instantiate the validator:
 
 ```javascript
 // Modern usage (ES Module)
