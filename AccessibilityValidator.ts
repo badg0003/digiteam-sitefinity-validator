@@ -95,8 +95,6 @@ interface AxeCore {
     getRules(): any[];
 }
 
-
-
 // Configuration interface for the accessibility validator
 interface AccessibilityValidatorConfig {
     /** CSS selectors for widgets to validate (required) */
