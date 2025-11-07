@@ -95,13 +95,7 @@ interface AxeCore {
     getRules(): any[];
 }
 
-// Make axe available globally for backward compatibility
-declare global {
-    interface Window {
-        axe?: AxeCore;
-        AccessibilityValidator?: typeof AccessibilityValidator;
-    }
-}
+
 
 // Configuration interface for the accessibility validator
 interface AccessibilityValidatorConfig {
@@ -229,10 +223,6 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
     constructor(config: AccessibilityValidatorConfig) {
         this.config = this.mergeConfig(config);
         this.uiClasses = this.createUIClasses();
-        // Make axe available globally for backward compatibility
-        if (typeof window !== 'undefined') {
-            window.axe = axe;
-        }
         this.initialize();
     }
 
@@ -759,28 +749,6 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
 function createAccessibilityValidator(config: AccessibilityValidatorConfig): AccessibilityValidator {
     return new AccessibilityValidator(config);
 }
-
-// Expose on window for global access
-if (typeof window !== 'undefined') {
-    window.AccessibilityValidator = AccessibilityValidator;
-}
-
-// Legacy compatibility - create default instance for card-video
-const cardVideoValidator = createAccessibilityValidator({
-    widgetSelectors: ['.card-video']
-});
-
-// Legacy global API
-(window as any).CardA11y = {
-    recheckAll: () => cardVideoValidator.recheckAll(),
-    debounceRecheck: (delay?: number) => cardVideoValidator.debounceRecheck(delay),
-    startWatching: () => cardVideoValidator.startWatching(),
-    stopWatching: () => cardVideoValidator.stopWatching(),
-    clearAll: () => cardVideoValidator.clearAll(),
-    addSelectors: (selectors: string[]) => cardVideoValidator.addSelectors(selectors),
-    getWidgetStates: () => cardVideoValidator.getWidgetStates(),
-    config: cardVideoValidator.getConfig()
-};
 
 // ES Module export for modern usage
 export default AccessibilityValidator;
