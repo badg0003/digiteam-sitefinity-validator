@@ -749,11 +749,18 @@ function createAccessibilityValidator(config: AccessibilityValidatorConfig): Acc
 }
 
 // ES Module export for modern usage
+// Expose on window for backward compatibility (UMD/browser global)
+if (typeof window !== 'undefined') {
+    (window as any).AccessibilityValidator = AccessibilityValidator;
+    (window as any).createAccessibilityValidator = createAccessibilityValidator;
+}
+
+// ES Module export for modern usage
 export default AccessibilityValidator;
 export { createAccessibilityValidator };
-export type { 
-    AccessibilityValidatorConfig, 
+export type {
+    AccessibilityValidatorConfig,
     AccessibilityValidatorAPI,
     AxeResults,
-    AxeViolation 
+    AxeViolation
 };
