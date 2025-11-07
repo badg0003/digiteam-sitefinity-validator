@@ -121,6 +121,45 @@ The AccessibilityValidator module now supports three modes for rule checking:
 2. **Specific Rules** - Check only certain rule IDs
 3. **Tag-based** - Check by accessibility standard tags
 
+## Handling Incomplete Results
+
+By default, axe-core may mark some checks as "incomplete" rather than "violations" when it cannot determine the result with certainty (e.g., color contrast on elements with transparent backgrounds). The `includeIncomplete` option controls how these are handled:
+
+```typescript
+// Default: Include only color-contrast incomplete results
+// (catches issues with transparent backgrounds)
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video']
+    // includeIncomplete defaults to undefined, which includes color-contrast incomplete
+});
+
+// Include ALL incomplete results as violations
+const strictValidator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video'],
+    includeIncomplete: true // Report everything
+});
+
+// Exclude ALL incomplete results (only violations)
+const conservativeValidator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video'],
+    includeIncomplete: false // Only definite violations
+});
+
+// Include specific incomplete rule IDs
+const customValidator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video'],
+    includeIncomplete: ['color-contrast', 'label'] // Specific rules only
+});
+```
+
+**When to use:**
+- **Default (undefined)**: Recommended for most cases - catches common contrast issues
+- **true**: When you need maximum coverage and can handle false positives
+- **false**: When you only want definite violations (may miss some real issues)
+- **Array**: When you want specific incomplete checks (e.g., ['color-contrast'])
+
+**Common use case:** CMS editors often apply styles that create transparent backgrounds, making color contrast checks incomplete. The default behavior catches these issues while minimizing false positives from other incomplete checks.
+
 ## 1. Check ALL Accessibility Rules (Recommended)
 
 ```typescript
@@ -269,6 +308,15 @@ validator.updateConfig({
 validator.updateConfig({
     axeRules: [], // Empty = all rules
     axeTags: undefined
+});
+
+// Change incomplete results handling
+validator.updateConfig({
+    includeIncomplete: true // Include all incomplete results
+});
+
+validator.updateConfig({
+    includeIncomplete: ['color-contrast', 'label'] // Specific incomplete rules
 });
 ```
 

@@ -117,3 +117,46 @@ const validator = new AccessibilityValidator({
 2. Update any documentation referencing the old CDN approach
 3. Consider publishing to npm for easier distribution
 4. Add automated tests (optional)
+
+## Version History
+
+### v1.1.0 (Latest)
+**New Feature:** `includeIncomplete` configuration option
+
+Axe-core sometimes marks checks as "incomplete" rather than "violations" when it cannot determine results with certainty (e.g., color contrast on transparent backgrounds). This version adds flexible control over incomplete results:
+
+```typescript
+// Default: Include color-contrast incomplete results only
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video']
+});
+
+// Include ALL incomplete results
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video'],
+    includeIncomplete: true
+});
+
+// Exclude ALL incomplete results
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video'],
+    includeIncomplete: false
+});
+
+// Include specific incomplete rule IDs
+const validator = new AccessibilityValidator({
+    widgetSelectors: ['.card-video'],
+    includeIncomplete: ['color-contrast', 'label']
+});
+```
+
+**Why this matters:** CMS editors (like Sitefinity) often apply styles dynamically, creating transparent backgrounds that make contrast checks incomplete. The default behavior (color-contrast only) catches these real issues while avoiding false positives from other incomplete checks.
+
+### v1.0.1
+- Fixed UMD bundle constructor export
+- Improved browser global access
+
+### v1.0.0
+- Initial npm release with bundled axe-core
+- Removed manual CDN dependency
+

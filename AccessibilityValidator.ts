@@ -135,6 +135,18 @@ interface AccessibilityValidatorConfig {
     
     /** Enable debug logging (optional, defaults to dev environment detection) */
     enableDebugLogging?: boolean;
+    
+    /** Include incomplete results as violations (optional, defaults to true for color-contrast)
+     * - `true`: Include ALL incomplete results
+     * - `false`: Don't include any incomplete results
+     * - `string[]`: Include incomplete results only for specific rule IDs (e.g., ['color-contrast'])
+     * - `undefined`: Default behavior - includes only 'color-contrast' incomplete results
+     * 
+     * Incomplete results are issues axe-core couldn't fully determine, often due to:
+     * - Transparent backgrounds with inherited colors
+     * - Background images (can't analyze image colors)
+     * - Complex CSS layouts or pseudo-elements */
+    includeIncomplete?: boolean | string[];
 }
 
 // Internal type definitions
@@ -625,7 +637,28 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
                 }
                 // If neither axeRules nor axeTags are specified, run ALL rules (no runOnly restriction)
                 
-                const { violations }: AxeResults = await axe.run(document, axeOptions);
+                const { violations, incomplete }: AxeResults = await axe.run(document, axeOptions);
+                
+                // Combine violations and incomplete results based on configuration
+                let allIssues: AxeViolation[] = [...violations];
+                
+                if (incomplete && incomplete.length > 0) {
+                    const includeConfig = this.config.includeIncomplete;
+                    
+                    if (includeConfig === undefined) {
+                        // Default: include only color-contrast incomplete
+                        const filtered = incomplete.filter(item => item.id === 'color-contrast');
+                        allIssues = [...allIssues, ...(filtered as AxeViolation[])];
+                    } else if (includeConfig === true) {
+                        // Include ALL incomplete results
+                        allIssues = [...allIssues, ...(incomplete as AxeViolation[])];
+                    } else if (Array.isArray(includeConfig)) {
+                        // Include only specific rule IDs
+                        const filtered = incomplete.filter(item => includeConfig.includes(item.id));
+                        allIssues = [...allIssues, ...(filtered as AxeViolation[])];
+                    }
+                    // If false, don't include any (already handled by default allIssues)
+                }
                 
                 if (this.config.enableDebugLogging) {
                     const summary: ViolationSummary[] = violations.map(v => ({ 
@@ -637,10 +670,19 @@ class AccessibilityValidator implements AccessibilityValidatorAPI {
                                    this.config.axeTags?.length ? `tags: ${this.config.axeTags.join(', ')}` :
                                    'ALL available rules';
                     console.log(`[AccessibilityValidator] Checked ${ruleInfo}, violations found:`, summary);
+                    
+                    if (this.config.includeIncomplete && incomplete.length > 0) {
+                        const incompleteSummary = incomplete.map(v => ({ 
+                            id: v.id, 
+                            nodes: v.nodes.length,
+                            description: v.description 
+                        }));
+                        console.log(`[AccessibilityValidator] Incomplete results (needs review):`, incompleteSummary);
+                    }
                 }
                 
                 widgets.forEach((widget: Element): void => {
-                    const widgetViolations: AxeViolation[] = violations.filter((violation: AxeViolation): boolean => {
+                    const widgetViolations: AxeViolation[] = allIssues.filter((violation: AxeViolation): boolean => {
                         return violation.nodes.some((node: AxeNode): boolean => {
                             const element: Element | null = node.target ? document.querySelector(node.target.join(' ')) : null;
                             return element !== null && widget.contains(element);

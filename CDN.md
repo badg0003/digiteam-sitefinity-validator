@@ -10,10 +10,10 @@ Your package will be automatically available on these CDNs:
 <script src="https://unpkg.com/digiteam-sitefinity-validator/dist/accessibility-validator.umd.js"></script>
 
 <!-- Pinned version (recommended for production) -->
-<script src="https://unpkg.com/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js"></script>
+<script src="https://unpkg.com/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.umd.js"></script>
 
 <!-- Specific file types -->
-<script src="https://unpkg.com/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.esm.js" type="module"></script>
+<script src="https://unpkg.com/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.esm.js" type="module"></script>
 ```
 
 ### jsDelivr (Recommended for Production)
@@ -22,12 +22,12 @@ Your package will be automatically available on these CDNs:
 <script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator/dist/accessibility-validator.umd.js"></script>
 
 <!-- Pinned version with SRI hash -->
-<script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js" 
+<script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.umd.js" 
         integrity="sha384-..." 
         crossorigin="anonymous"></script>
 
 <!-- Combine multiple files (jsdelivr feature) -->
-<script src="https://cdn.jsdelivr.net/combine/npm/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js,npm/other-package"></script>
+<script src="https://cdn.jsdelivr.net/combine/npm/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.umd.js,npm/other-package"></script>
 ```
 
 ### esm.sh (ES Modules)
@@ -42,7 +42,7 @@ Your package will be automatically available on these CDNs:
 
 <!-- With version -->
 <script type="module">
-  import AccessibilityValidator from 'https://esm.sh/digiteam-sitefinity-validator@1.0.0';
+  import AccessibilityValidator from 'https://esm.sh/digiteam-sitefinity-validator@1.1.0';
 </script>
 ```
 
@@ -54,7 +54,7 @@ Your package will be automatically available on these CDNs:
 
 <!-- Pinned version -->
 <script type="module">
-  import AccessibilityValidator from 'https://cdn.skypack.dev/digiteam-sitefinity-validator@1.0.0';
+  import AccessibilityValidator from 'https://cdn.skypack.dev/digiteam-sitefinity-validator@1.1.0';
 </script>
 ```
 
@@ -66,7 +66,7 @@ If you haven't published to npm yet, you can use GitHub + jsDelivr:
 
 ```html
 <!-- Using GitHub tag/release -->
-<script src="https://cdn.jsdelivr.net/gh/badg0003/digiteam-sitefinity-validator@v1.0.0/dist/accessibility-validator.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/badg0003/digiteam-sitefinity-validator@v1.1.0/dist/accessibility-validator.umd.js"></script>
 
 <!-- Using latest commit from main branch (not recommended for production) -->
 <script src="https://cdn.jsdelivr.net/gh/badg0003/digiteam-sitefinity-validator@main/dist/accessibility-validator.umd.js"></script>
@@ -74,7 +74,7 @@ If you haven't published to npm yet, you can use GitHub + jsDelivr:
 
 **Note:** For GitHub CDN to work:
 1. Commit your `dist/` folder to the repository
-2. Create a Git tag: `git tag v1.0.0 && git push origin v1.0.0`
+2. Create a Git tag: `git tag v1.1.0 && git push origin v1.1.0`
 3. Or create a GitHub Release
 
 ---
@@ -96,13 +96,14 @@ If you haven't published to npm yet, you can use GitHub + jsDelivr:
     </div>
 
     <!-- Load from CDN -->
-    <script src="https://unpkg.com/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js"></script>
+    <script src="https://unpkg.com/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.umd.js"></script>
     
     <!-- Initialize -->
     <script>
         const validator = new AccessibilityValidator({
             widgetSelectors: ['.card-video'],
-            enableDebugLogging: true
+            enableDebugLogging: true,
+            includeIncomplete: undefined // Default: include color-contrast incomplete results
         });
     </script>
 </body>
@@ -116,7 +117,7 @@ If you haven't published to npm yet, you can use GitHub + jsDelivr:
 ### 1. Pin Versions
 ```html
 <!-- ✅ Good - pinned version -->
-<script src="https://unpkg.com/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js"></script>
+<script src="https://unpkg.com/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.umd.js"></script>
 
 <!-- ❌ Avoid - unpinned (auto-updates) -->
 <script src="https://unpkg.com/digiteam-sitefinity-validator/dist/accessibility-validator.umd.js"></script>
@@ -124,7 +125,7 @@ If you haven't published to npm yet, you can use GitHub + jsDelivr:
 
 ### 2. Use SRI (Subresource Integrity) with jsDelivr
 ```html
-<script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.0.0/dist/accessibility-validator.umd.js" 
+<script src="https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.1.0/dist/accessibility-validator.umd.js" 
         integrity="sha384-HASH_HERE" 
         crossorigin="anonymous"></script>
 ```
@@ -164,8 +165,8 @@ Always use `https://` URLs, never `http://`
 5. **Wait 1-5 minutes** - CDNs auto-sync from npm
 
 New version will be available at:
-- `https://unpkg.com/digiteam-sitefinity-validator@1.0.1/...`
-- `https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.0.1/...`
+- `https://unpkg.com/digiteam-sitefinity-validator@1.1.0/...`
+- `https://cdn.jsdelivr.net/npm/digiteam-sitefinity-validator@1.1.0/...`
 
 ---
 
